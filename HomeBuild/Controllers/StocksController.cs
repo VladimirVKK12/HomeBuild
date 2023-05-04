@@ -96,7 +96,7 @@ namespace HomeBuild.Controllers
 		public async Task<IActionResult> GetProductDetails(int id, string searchWord)
 		{
 			var searchResults = await _stocksRepository.StocksSearch(searchWord);
-			if (searchResults == null || searchResults.Count == 0)
+			if (searchResults != null || searchResults.Count != 0)
 			{
 				var stocks = await _stocksRepository.GetById(id);
 				return View("GetProductDetails", stocks);

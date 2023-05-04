@@ -19,7 +19,6 @@ namespace HomeBuild.Repositories
 			_db = db;
 		}
 
-
 		// Вземане на всички артикули в количката на даден потребител
 		public async Task<List<ShoppingCart>> ShoppingCartItems(string userId)
 		{
@@ -36,20 +35,20 @@ namespace HomeBuild.Repositories
 			var shoppingCartItem = await _db.ShoppingCarts
 			.SingleOrDefaultAsync(s => s.ProductId == productId && s.UserId == userId);
 
-			if (shoppingCartItem != null)
+			if (shoppingCartItem != null && shoppingCartItem.Color == color && shoppingCartItem.Size == size)
 			{
 				// Ако съществува, увеличаваме количеството на артикула в количката
 				shoppingCartItem.Quantity += quantity;
 				await _db.SaveChangesAsync();
 				return;
 			}
-
+			
 			// Иначе, артикулът все още не е добавен в количката и го добавяме
 			var stock = await _db.Stocks.FindAsync(productId);
 			shoppingCartItem = new ShoppingCart
 			{
-				UserId = userId,
-				ProductId = productId,
+                ProductId = productId,
+                UserId = userId,
 				ProductName = stock.Product,
 				Price = stock.Price,
 				Quantity = quantity,
@@ -57,6 +56,7 @@ namespace HomeBuild.Repositories
 				Size = size,
 				UrlImg = stock.UrlImg
 			};
+			shoppingCartItem.Price = stock.Price;
 			_db.ShoppingCarts.Add(shoppingCartItem);
 			await _db.SaveChangesAsync();
 		}

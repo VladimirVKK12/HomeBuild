@@ -4,7 +4,7 @@ namespace HomeBuild.ViewModel.AccountsVM
 {
 	public class RegisterVM
 	{
-		[StringLength(25, MinimumLength = 5, ErrorMessage = "Трябва да е между 5-25 симвула")]
+		[StringLength(25, MinimumLength = 4, ErrorMessage = "Трябва да е между 4-25 симвула")]
 		public string Username { get; set; }
 
 		[StringLength(35, MinimumLength = 6, ErrorMessage = "Трябва да е между 6-35 симвула")]

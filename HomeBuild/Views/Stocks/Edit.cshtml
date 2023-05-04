@@ -1,0 +1,56 @@
+﻿@model HomeBuild.ViewModel.StocksVM.StocksCRUD
+@{
+    ViewData["Title"] = "Edit";
+}
+<br>
+<div class="mask d-flex align-items-center h-100 gradient-custom-3">
+	<div class="container h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 col-md-9 col-lg-7 col-xl-6">
+				<div class="card" style="border-radius: 15px;">
+					<div class="card-body p-5">
+						<h2 class="text-uppercase text-center mb-5">Промяна на стоката</h2>
+
+						<form asp-controller="Stocks" asp-action="Edit" method="post"  enctype="multipart/form-data">
+							<div class="form-outline mb-4">
+								<input asp-for="Type" type="text" id="form3Example3cg" placeholder="Тип на стоката(плочки,бои,обшивки)" class="form-control form-control-lg" />
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Product" type="text" id="form3Example1cg" placeholder="Име на стоката" class="form-control form-control-lg" />
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Size" type="text" id="form3Example4cg" placeholder="Размер(10x20,5л)" class="form-control form-control-lg" />
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Color" type="text" id="form3Example4cdg" placeholder="Цвят" class="form-control form-control-lg" />
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Quantity" type="text" id="form3Example4cg" placeholder="Колчество" class="form-control form-control-lg" />
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Price" type="text" id="form3Example4cdg" placeholder="Цена" class="form-control form-control-lg" />
+							</div>
+							<div class="form-outline mb-4">
+								<input asp-for="UrlImage" type="file" id="form3Example4cdg" placeholder="Снимка(URL.....)" class="form-control form-control-lg" />
+							</div>
+
+							<div class="d-flex justify-content-center">
+								<button type="submit"
+										class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+									Запазване
+								</button>
+							</div>
+
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -20,7 +20,7 @@ o => {
 	o.MaxBatchSize(1000);
 	o.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
 }));
-builder.Services.AddIdentity < ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity <ApplicationUser, IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<StocksRepository>();

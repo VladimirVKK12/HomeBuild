@@ -45,7 +45,7 @@ namespace HomeBuild.Repositories
 				Quantity = entity.Quantity,
 				Price = entity.Price,
 				Color = string.Join(",", entity.Color),
-				Size = entity.Size,
+				Size = string.Join(",", entity.Size),
 				UrlImg = fileName,
 			};
 			_db.Stocks.Add(stocks);

@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=2.0" />
 	<title>@ViewData["Title"] - HomeBuild</title>
-	<link rel="icon" type="image/png" href="images/favicon.png">
+	<link rel="icon" type="image/png" href="images/logo.png">
 	<!-- Web Font -->
 	<link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
@@ -14,7 +14,7 @@
 	<!-- Magnific Popup -->
 	<link rel="stylesheet" href="~/css/magnific-popup.min.css">
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="~/css/font-awesome.css">
+	<link rel="stylesheet" href="~/css/font-awesome.css" />
 	<!-- Fancybox -->
 	<link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
 	<!-- Themify Icons -->
@@ -55,19 +55,7 @@
 						<!-- Top Right -->
 						<div class="right-content">
 							<ul class="list-main">
-								<li><i class="ti-location-pin"></i>Локация на магазина</li>
-								<li><i class="ti-user"></i> <a href="#">Моят акаунт</a></li>
-								<li>
-									<i class="ti-power-off"></i>
-									<a asp-controller="Account" asp-action="Register">Регистрираите се</a>
-								</li>
-								@*@if (Authen.Saver != null)
-								{
-									<li>
-										<i class="ti-user"></i>
-										@Authen.Saver.Username
-									</li>
-								}*@
+								@Html.Partial("_VerifyPartial")
 							</ul>
 						</div>
 						<!-- End Top Right -->
@@ -80,32 +68,15 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-2 col-md-2 col-12">
-						<!-- Logo -->
-						<div class="logo">
-							<a href="index.html"><img src="images/logo.png" alt="logo"></a>
-						</div>
-						<!--/ End Logo -->
-						<!-- Search Form -->
-						<div class="search-top">
-							<div class="top-search"><a href="#0"><i class="ti-search"></i></a></div>
-							<!-- Search Form -->
-							<div class="search-top">
-								<form class="search-form">
-									<input type="text" placeholder="Потърси тук..." name="search">
-									<button value="search" type="submit"><i class="ti-search"></i></button>
-								</form>
-							</div>
-							<!--/ End Search Form -->
-						</div>
-						<!--/ End Search Form -->
+						<img style="height:80px" src="~/images/logo.png">
 						<div class="mobile-nav"></div>
 					</div>
 					<div class="col-lg-8 col-md-7 col-12">
 						<div class="search-bar-top">
 							<div class="search-bar">
-								<form>
-									<input name="search" placeholder="Потърси продук тук....." type="search">
-									<button class="btnn"><i class="ti-search"></i></button>
+								<form method="post" asp-controller="Stocks" asp-action="GetProductDetails">
+									<input name="searchWord" placeholder="Потърси продук тук....." type="search">
+									<button type="submit" class="btnn"><i class="ti-search"></i></button>
 								</form>
 							</div>
 						</div>
@@ -141,43 +112,27 @@
 									<div class="navbar-collapse">
 										<div class="nav-inner">
 											<ul class="nav main-menu menu navbar-nav">
-												<li>
-													<a href="#">КАТЕГОРИИ<i class="ti-angle-down"></i></a>
-													<ul class="dropdown">
-														<li><a asp-controller="Home" asp-action="Index">Главно меню</a></li>
-														<li><a asp-controller="Stocks" asp-action="Table">Таблица със стоките</a></li>
-													</ul>
-
-												</li>
-												<li><a href="#">Продукти</a></li>
-												<li><a href="#">Обслужване</a></li>
+												<li><a asp-controller="Home" asp-action="Index">Главно меню</a></li>
 												<li>
 													<a href="#">Магазин<i class="ti-angle-down"></i></a>
 													<ul class="dropdown">
-														<li><a asp-controller="ShoppingCart" asp-action="DisplayCart">Количка с продукти</a></li>
-														<li><a href="checkout.html">Заплащане</a></li>
+														<li><a asp-controller="ShoppingCart" asp-action="MyPurchases">Количка с продукти</a></li>
+														<li><a asp-controller="ShoppingCart" asp-action="Checkout">Заплащане</a></li>
 													</ul>
 												</li>
-												<li><a href="contact.html">Връзка с нас</a></li>
-												<li>
-													<a href="#">Управление на Стоките<i class="ti-angle-down"></i></a>
-													<ul class="dropdown">
-														<li><a asp-controller="Stocks" asp-action="Create">Добавяне на стока</a></li>
-														<li><a asp-controller="Stocks" asp-action="Table">Таблица със стоките</a></li>
-													</ul>
-
-												</li>
-												@*@if (Authen.Saver != null && Authen.Saver.Admin == true)
+												<li><a asp-controller="Shared" asp-action="AboutUs">За нас</a></li>
+												<li><a asp-controller="ShoppingCart" asp-action="PurchasesHistory">История на покупките</a></li>
+												@if (User.Identity.IsAuthenticated != null && User.IsInRole("Admin"))
 												{
-													<ul class="dropdown">
-														<li>
-															<a asp-controller="Stocks" asp-action="Create">Управление на Стоките</a>
-														</li>
-														<li>
-															<a asp-controller="Stocks" asp-action="Create">Таблица със стоките</a>
-														</li>
-													</ul>
-												}*@
+													<li>
+														<a href="#">Админски панел<i class="ti-angle-down"></i></a>
+														<ul class="dropdown">
+															<li><a asp-controller="Stocks" asp-action="Create">Добавяне на стока</a></li>
+															<li><a asp-controller="Stocks" asp-action="Table">Таблица със стоките</a></li>
+															<li><a asp-controller="Accounts" asp-action="AccountsTable">Таблица със стоките</a></li>
+														</ul>
+													</li>
+												}
 											</ul>
 										</div>
 									</div>
@@ -191,6 +146,7 @@
 		</div>
 		<!--/ End Header Inner -->
 	</header>
+
 	<div class="container">
 		<main role="main" class="pb-3">
 			@RenderBody()
@@ -206,9 +162,9 @@
 						<!-- Single Widget -->
 						<div class="single-footer about">
 							<div class="logo">
-								<a href="index.html"><img src="images/logo2.png" alt="#"></a>
+								<img style="height:80px" src="~/images/logo.png">
 							</div>
-							<p class="text">И когато завали - моя си, моя!Падат ли мъгли - моя си, моя!Щом сега горчи - моя си, мояоще ден, нали?!С мен поне за още ден, нали?!</p>
+							<p class="text">Ние сме надеждна компания, занимаваща се с производство и дистрибуция на строителни материали. Ние можем да осигурим всичко необходимо, за да поддържате красотата на вашия дом и офис.</p>
 							<p class="call">Имате въпроси?Позвънете ни<span><a href="tel:123456789">+0123 456 789</a></span></p>
 						</div>
 						<!-- End Single Widget -->
@@ -219,7 +175,6 @@
 							<h4>Информация</h4>
 							<ul>
 								<li><a href="#">За нас</a></li>
-								<li><a href="#">ЧЗВ</a></li>
 								<li><a href="#">Правила и условия</a></li>
 								<li><a href="#">Свържете се с нас</a></li>
 								<li><a href="#">Помощ</a></li>
@@ -227,37 +182,25 @@
 						</div>
 						<!-- End Single Widget -->
 					</div>
-					<div class="col-lg-2 col-md-6 col-12">
-						<!-- Single Widget -->
-						<div class="single-footer links">
-							<h4>Обслужване на клиенти</h4>
-							<ul>
-								<li><a href="#">Начин на плащане</a></li>
-								<li><a href="#">Доставка</a></li>
-								<li><a href="#">Политика за поверителност</a></li>
-							</ul>
-						</div>
-						<!-- End Single Widget -->
-					</div>
 					<div class="col-lg-3 col-md-6 col-12">
 						<!-- Single Widget -->
 						<div class="single-footer social">
-							<h4>Get In Tuch</h4>
+							<h4>Свържете се с нас</h4>
 							<!-- Single Widget -->
 							<div class="contact">
 								<ul>
 									<li>NO. 342 - London Oxford Street.</li>
 									<li>012 United Kingdom.</li>
-									<li>info@eshop.com</li>
+									<li>homebuild@eshop.com</li>
 									<li>+032 3456 7890</li>
 								</ul>
 							</div>
 							<!-- End Single Widget -->
 							<ul>
-								<li><a href="#"><i class="ti-facebook"></i></a></li>
-								<li><a href="#"><i class="ti-twitter"></i></a></li>
-								<li><a href="#"><i class="ti-flickr"></i></a></li>
-								<li><a href="#"><i class="ti-instagram"></i></a></li>
+								<li><a href="https://www.facebook.com/?stype=lo&jlou=Afci1pbmAaq3B6tO5gKW3qY148bLMTwOI10qhLASLrbxzd2k9flP_5MfCjo5SAdxqr3shRbBhue4wuBcRUHtnqt70rAr6PuDESEFZmbTcJH26Q&smuh=51705&lh=Ac9_miM6cxJ9Wh5OKEY"><i class="ti-facebook"></i></a></li>
+								<li><a href="https://twitter.com/?lang=bg"><i class="ti-twitter"></i></a></li>
+								<li><a href="https://www.flickr.com/"><i class="ti-flickr"></i></a></li>
+								<li><a href="https://www.google.com/search?q=instagram+login&rlz=1C1GCEU_bgBG984BG984&oq=inst&gs_lcrp=EgZjaHJvbWUqBwgDEAAYgAQyBggAEEUYPDIGCAEQRRg5MgYIAhBFGDsyBwgDEAAYgAQyBwgEEAAYgAQyBwgFEAAYgAQyBggGEEUYPDIGCAcQRRg80gEIMzA1NGowajSoAgCwAgA&sourceid=chrome&ie=UTF-8"><i class="ti-instagram"></i></a></li>
 							</ul>
 						</div>
 						<!-- End Single Widget -->
@@ -271,13 +214,8 @@
 				<div class="inner">
 					<div class="row">
 						<div class="col-lg-6 col-12">
-							<div class="left">
-								<p>Copyright © 2020 <a href="http://www.wpthemesgrid.com" target="_blank">Wpthemesgrid</a>  -  All Rights Reserved.</p>
-							</div>
-						</div>
-						<div class="col-lg-6 col-12">
 							<div class="right">
-								<img src="images/payments.png" alt="#">
+								<img src="images/payments.png">
 							</div>
 						</div>
 					</div>

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<HomeBuild.Models.Stocks>
+@{
+	ViewData["Title"] = "Table";
+}
+<form asp-action="Table" method="post">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr class="text-center">
+					<th>Изображение</th>
+					<th>Тип</th>
+					<th>Име</th>
+					<th>Размер</th>
+					<th>Цвят</th>
+					<th>Количество</th>
+					<th>Цена</th>
+					<th>Промени</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr class="text-center">
+						<td style="height:200px;width:150px" ><img src="@Url.Content(item.UrlImg)" alt="Product Image" class="img-thumbnail"></td>
+						<td>@item.Type</td>
+						<td>@item.Product</td>
+						<td>@item.Size</td>
+						<td>@item.Color</td>
+						<td>@item.Quantity</td>
+						<td>@item.Price</td>
+						<td>
+							<a href="@Url.Action("Edit", new { id = item.Id })" style="color: blue; text-decoration: underline;">Промени , </a>
+							<a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Сигурен ли си че искаш да го истриеш')"style="color: blue; text-decoration: underline;">Премахни</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</form>

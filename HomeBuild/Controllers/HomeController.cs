@@ -1,4 +1,6 @@
-﻿using HomeBuild.Models;
+﻿using HomeBuild.Data;
+using HomeBuild.Models;
+using HomeBuild.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,19 +8,24 @@ namespace HomeBuild.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _db;
+        private readonly StocksRepository _stocksRepository;
 
-		public HomeController(ILogger<HomeController> logger)
-		{
-			_logger = logger;
-		}
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db, StocksRepository stocksRepository)
+        {
+            _stocksRepository = stocksRepository;
+            _db = db;
+            _logger = logger;
+        }
+        public IActionResult Index()
+        {
+            var stocks = _db.Stocks.ToList();
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+            return View(stocks);
+        }
 
-		public IActionResult Privacy()
+        public IActionResult Privacy()
 		{
 			return View();
 		}
