@@ -31,7 +31,7 @@
 						<input type="number" style="width:63px" id="quantity" min="1" name="quantity" value="@item.Quantity" oninput="submitForm(this.form)" />
 					</form>
 				</td>
-				<td>@(Model.ProductTotal.ContainsKey(item.ProductName) ? Model.ProductTotal[item.ProductName].ToString() : "0")</td>
+				<td>@(Model.ProductTotal.ContainsKey($"{item.ProductName} ({item.Color}) ({item.Size})") ? Model.ProductTotal[$"{item.ProductName} ({item.Color}) ({item.Size})"].ToString() : "0")</td>
 				<td>
 					<form asp-action="RemoveFromCart" method="post" asp-controller="ShoppingCart">
 						<input type="hidden" name="id" value="@item.Id" />
@@ -46,11 +46,11 @@
 			<td>
 				@if (Model.PriceTotal == 0)
 				{
-					<a asp-controller="ShoppingCart" asp-action="MyPurchases" onclick="return confirm('Няма достатъчно продукти от този тип')">Заплати</a>
+					<a asp-controller="ShoppingCart" asp-action="MyPurchases" class="btn text-white" onclick="return confirm('Количката е празна')">Заплати</a>
 				}
 				else
 				{
-					<a asp-controller="ShoppingCart" asp-action="Checkout">Заплати</a>
+					<a asp-controller="ShoppingCart" asp-action="Checkout" asp-route-payment="true" class="btn text-white">Заплати</a>
 				}
 
 			</td>

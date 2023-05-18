@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=2.0" />
 	<title>@ViewData["Title"] - HomeBuild</title>
-	<link rel="icon" type="image/png" href="images/logo.png">
+	<link rel="icon" type="image/png" href="~/images/logo.png">
 	<!-- Web Font -->
 	<link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
@@ -68,14 +68,14 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-2 col-md-2 col-12">
-						<img style="height:80px" src="~/images/logo.png">
+						<img style="height:70px" src="~/images/logo.png">
 						<div class="mobile-nav"></div>
 					</div>
 					<div class="col-lg-8 col-md-7 col-12">
 						<div class="search-bar-top">
 							<div class="search-bar">
-								<form method="post" asp-controller="Stocks" asp-action="GetProductDetails">
-									<input name="searchWord" placeholder="Потърси продук тук....." type="search">
+								<form method="post" action="@Url.Action("GetProductDetails", "Stocks")">
+									<input style="width:475px" name="searchWord" placeholder="Потърси продук тук....." type="search">
 									<button type="submit" class="btnn"><i class="ti-search"></i></button>
 								</form>
 							</div>
@@ -84,17 +84,18 @@
 
 					<div class="col-lg-2 col-md-3 col-12">
 						<div class="right-bar">
-							<!-- Search Form -->
-							<div class="sinlge-bar">
-								<a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-							</div>
-							<div class="sinlge-bar">
-								<a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
-							</div>
+							@if (!User.Identity.IsAuthenticated)
+							{
+								<div class="sinlge-bar">
+									<a asp-controller="Accounts" asp-action="Register" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
+								</div>
+							}
 							<div class="sinlge-bar shopping">
-								<a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">2</span></a>
+								<a asp-controller="ShoppingCart" asp-action="MyPurchases" class="single-icon"><i class="ti-bag"></i></a>
 							</div>
-							<!-- End Search Form -->
+							<div class="sinlge-bar">
+								<a asp-controller="ShoppingCart" asp-action="PurchasesHistory" class="single-icon"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -113,25 +114,21 @@
 										<div class="nav-inner">
 											<ul class="nav main-menu menu navbar-nav">
 												<li><a asp-controller="Home" asp-action="Index">Главно меню</a></li>
-												<li>
-													<a href="#">Магазин<i class="ti-angle-down"></i></a>
-													<ul class="dropdown">
-														<li><a asp-controller="ShoppingCart" asp-action="MyPurchases">Количка с продукти</a></li>
-														<li><a asp-controller="ShoppingCart" asp-action="Checkout">Заплащане</a></li>
-													</ul>
-												</li>
-												<li><a asp-controller="Shared" asp-action="AboutUs">За нас</a></li>
+												<li><a asp-controller="ShoppingCart" asp-action="MyPurchases">Количка с продукти</a></li>
+												<li><a asp-controller="Home" asp-action="AboutUs">За нас</a></li>
 												<li><a asp-controller="ShoppingCart" asp-action="PurchasesHistory">История на покупките</a></li>
+
 												@if (User.Identity.IsAuthenticated != null && User.IsInRole("Admin"))
 												{
-													<li>
+												    <li>
 														<a href="#">Админски панел<i class="ti-angle-down"></i></a>
 														<ul class="dropdown">
 															<li><a asp-controller="Stocks" asp-action="Create">Добавяне на стока</a></li>
 															<li><a asp-controller="Stocks" asp-action="Table">Таблица със стоките</a></li>
-															<li><a asp-controller="Accounts" asp-action="AccountsTable">Таблица със стоките</a></li>
+															<li><a asp-controller="Accounts" asp-action="AccountsTable">Всички потребители</a></li>
+															<li><a asp-controller="ShoppingCart" asp-action="EveryPurchase">Всички покупки</a></li>
 														</ul>
-													</li>
+												    </li>
 												}
 											</ul>
 										</div>
@@ -165,7 +162,6 @@
 								<img style="height:80px" src="~/images/logo.png">
 							</div>
 							<p class="text">Ние сме надеждна компания, занимаваща се с производство и дистрибуция на строителни материали. Ние можем да осигурим всичко необходимо, за да поддържате красотата на вашия дом и офис.</p>
-							<p class="call">Имате въпроси?Позвънете ни<span><a href="tel:123456789">+0123 456 789</a></span></p>
 						</div>
 						<!-- End Single Widget -->
 					</div>
@@ -174,10 +170,9 @@
 						<div class="single-footer links">
 							<h4>Информация</h4>
 							<ul>
-								<li><a href="#">За нас</a></li>
+								<li><a asp-controller="Home" asp-action="AboutUs">За нас</a></li>
 								<li><a href="#">Правила и условия</a></li>
 								<li><a href="#">Свържете се с нас</a></li>
-								<li><a href="#">Помощ</a></li>
 							</ul>
 						</div>
 						<!-- End Single Widget -->
@@ -189,8 +184,7 @@
 							<!-- Single Widget -->
 							<div class="contact">
 								<ul>
-									<li>NO. 342 - London Oxford Street.</li>
-									<li>012 United Kingdom.</li>
+									<li>бул. „Пещерско шосе“ 26, 4002 ж.к. Младежки хълм, Пловдив</li>
 									<li>homebuild@eshop.com</li>
 									<li>+032 3456 7890</li>
 								</ul>
@@ -215,7 +209,7 @@
 					<div class="row">
 						<div class="col-lg-6 col-12">
 							<div class="right">
-								<img src="images/payments.png">
+								<img src="~/images/payments.png">
 							</div>
 						</div>
 					</div>

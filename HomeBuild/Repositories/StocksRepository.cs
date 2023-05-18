@@ -117,12 +117,12 @@ namespace HomeBuild.Repositories
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task<List<Stocks>> StocksSearch(string search)
+		public async Task<List<Stocks>> StocksSearch(string searchWord)
 		{
 			// Създаване на празен списък, в който да се запишат стоките, които отговарят на търсенето
 			List<Stocks> searched = new List<Stocks>();
 
-			if (search != null)
+			if (searchWord != null)
 			{
 				// Извличане на всички стоки от базата данни
 				IQueryable<Stocks> query = _db.Stocks;
@@ -130,7 +130,7 @@ namespace HomeBuild.Repositories
 				foreach (var item in query)
 				{
 					string name = string.Concat(item.Type, " ", item.Product).ToLower();
-					if (name.Contains(search.ToLower()))
+					if (name.Contains(searchWord.ToLower()))
 					{
 						searched.Add(item);
 					}

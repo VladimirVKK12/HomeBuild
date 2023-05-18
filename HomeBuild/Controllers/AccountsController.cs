@@ -31,7 +31,7 @@ namespace HomeBuild.Controllers
 
 		// GET action метод за показване на формата за регистрация
 		[HttpGet]
-		public async Task<IActionResult> Register()
+        public async Task<IActionResult> Register()
 		{
 			// Проверка дали ролите в системата съществуват и ако не, ги създава
 			if (!_roleManager.RoleExistsAsync(Separator.Admin).GetAwaiter().GetResult())
@@ -49,25 +49,33 @@ namespace HomeBuild.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				// Създаване на нов обект ApplicationUser и задаване на стойности за неговите свойства
-				var user = new ApplicationUser
+				var userExists = await _userManager.FindByNameAsync(model.Username);
+				var emailExist = await _userManager.FindByNameAsync(model.Email);
+				if (userExists != null || emailExist != null)
 				{
-					UserName = model.Username,
-					Email = model.Email,
-					FullName = model.Username + "," + model.Email
-				};
-				// Използване на асинхронен метод за създаване на потребител в базата данни
-				var result = await _userManager.CreateAsync(user, model.Password);
-				if (result.Succeeded)
-				{
-					// Добавяне на роля
-					await _userManager.AddToRoleAsync(user, Separator.Users);
-					await _signInManager.SignInAsync(user, isPersistent: false);
-					return RedirectToAction("Index", "Home");
+					TempData["errEmail"] = "Имейла е вече използван!";
+					TempData["email"] = "email";
+					TempData["errUser"] = "Потребителското име е вече използвано!";
+					TempData["user"] = "user";
 				}
-				foreach (var error in result.Errors)
+				else
 				{
-					ModelState.AddModelError("", error.Description);
+					// Създаване на нов обект ApplicationUser и задаване на стойности за неговите свойства
+					var user = new ApplicationUser
+					{
+						UserName = model.Username,
+						Email = model.Email,
+						FullName = model.Username + "," + model.Email
+					};
+					// Използване на асинхронен метод за създаване на потребител в базата данни
+					var result = await _userManager.CreateAsync(user, model.Password);
+					if (result.Succeeded)
+					{
+						// Добавяне на роля
+						await _userManager.AddToRoleAsync(user, Separator.Users);
+						await _signInManager.SignInAsync(user, isPersistent: false);
+						return RedirectToAction("Index", "Home");
+					}
 				}
 			}
 			return View(model);
@@ -76,7 +84,7 @@ namespace HomeBuild.Controllers
 
 		// POST и GET action метод за влизане в системата
 		[HttpPost, HttpGet]
-		public async Task<IActionResult> LogIn(LogInVM model)
+         public async Task<IActionResult> LogIn(LogInVM model)
 		{
 			if (!ModelState.IsValid)
 				return View(model);
@@ -86,6 +94,7 @@ namespace HomeBuild.Controllers
 
 			if (user != null)
 			{
+
 				// Проверка на паролата на потребителя
 				var password = await _userManager.CheckPasswordAsync(user, model.Password);
 
@@ -101,13 +110,17 @@ namespace HomeBuild.Controllers
 				}
 				else
 				{
-					ModelState.AddModelError(string.Empty, "Invalid login at-tempt.");
+					TempData["errPass"] = "Грешна парола!";
+					TempData["pass"] = "pass";
 					return View(model);
 				}
 			}
 
+			TempData["errEmail"] = "Няма такъв имейл!";
+			TempData["email"] = "email";
+
 			return View(model);
-		}
+		 }
 
 		// Изход от системата
 		[HttpPost, HttpGet]
@@ -116,7 +129,7 @@ namespace HomeBuild.Controllers
 			// Използване на асинхронен метод на _signInManager за излизане от системата
 			await _signInManager.SignOutAsync();
 
-			return RedirectToAction("Register", "Accounts");
+			return RedirectToAction("Index", "Home");
 		}
 
 		// Изтриване на потребител след като го намери по id

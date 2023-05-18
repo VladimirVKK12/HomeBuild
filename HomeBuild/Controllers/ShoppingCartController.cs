@@ -10,7 +10,6 @@ using System.Security.Claims;
 
 namespace HomeBuild.Controllers
 {
-	[Authorize] // само автентицираните потребители могат да достъпят този контролер
 	public class ShoppingCartController : Controller
 	{
 		private readonly ShoppingCartRepository _shoppingCartRepository;
@@ -59,7 +58,6 @@ namespace HomeBuild.Controllers
 		{
 			if (User.Identity.IsAuthenticated)
 			{
-
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);//намира идентификатора на логнатия потребител
 				var cartItems = await _shoppingCartRepository.UserShoppingCart(userId);//извлича количката на потребителя
 
@@ -67,33 +65,47 @@ namespace HomeBuild.Controllers
 			}
 			else
 			{
-				return RedirectToAction("Register", "Accounts");
+				return RedirectToAction("LogIn", "Accounts");
 			}
 		}
 
 		// Извеждане на историята на покупките на потребителя
-		public async Task<IActionResult> PurchasesHistory()
+		public async Task<IActionResult> PurchasesHistory(bool payment)
 		{
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var historyItems = await _shoppingCartRepository.OrderHistory(userId);//извлича историята на потребителя
-
-			if (historyItems == null || historyItems.Count == 0)
+			if (User.Identity.IsAuthenticated)
 			{
-				TempData["ЕrrorNoItem"] = "Няма продукт в количката!";
-
-				return RedirectToAction("MyPurchases");
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var historyItems = await _shoppingCartRepository.OrderHistory(userId,payment);//извлича историята на потребителя
+				return View(historyItems);
 			}
 			else
 			{
-				return View(historyItems);
+				return RedirectToAction("LogIn", "Accounts");
 			}
 		}
 
+		[HttpGet,HttpPost]
+        public async Task<IActionResult> EveryPurchase(List<int> paidIds)
+        {
+            var orderItems = await _db.ShoppingCartHistories.ToListAsync();
 
-		public async Task<IActionResult> Checkout()
+            if (ModelState.IsValid)
+            {
+                foreach (var item in orderItems)
+                {
+                    item.Payed = paidIds.Contains(item.Id);
+                }
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(orderItems);
+        }
+
+
+        public async Task<IActionResult> Checkout()
 		{
 			var userId = User.Identity.Name;
-
 			bool paymentResult = await _shoppingCartRepository.Payment(userId);
 			return View();
 		}

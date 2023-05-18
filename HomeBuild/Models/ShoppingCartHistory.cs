@@ -13,6 +13,7 @@ namespace HomeBuild.Models
 		public string Color { get; set; }
 		public string Size { get; set; }
 		public string UserId { get; set; }
+		public string Usernamne { get; set; }
 		public decimal ProductTotal { get; set; }
 		public decimal PriceTotal { get; set; }
 		public DateTime PurchaseDate { get; set; }

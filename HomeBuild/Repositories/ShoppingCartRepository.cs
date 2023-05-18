@@ -22,10 +22,7 @@ namespace HomeBuild.Repositories
 		// Вземане на всички артикули в количката на даден потребител
 		public async Task<List<ShoppingCart>> ShoppingCartItems(string userId)
 		{
-			return await _db.ShoppingCarts
-			.Include(x => x.User)
-			.Where(x => x.UserId == userId)
-			.ToListAsync();
+			return await _db.ShoppingCarts.Include(x => x.User).Where(x => x.UserId == userId).ToListAsync();
 		}
 
 		// Добавяне на артикул в количката
@@ -39,6 +36,7 @@ namespace HomeBuild.Repositories
 			{
 				// Ако съществува, увеличаваме количеството на артикула в количката
 				shoppingCartItem.Quantity += quantity;
+				shoppingCartItem.Price += shoppingCartItem.Price;
 				await _db.SaveChangesAsync();
 				return;
 			}
@@ -56,7 +54,6 @@ namespace HomeBuild.Repositories
 				Size = size,
 				UrlImg = stock.UrlImg
 			};
-			shoppingCartItem.Price = stock.Price;
 			_db.ShoppingCarts.Add(shoppingCartItem);
 			await _db.SaveChangesAsync();
 		}
@@ -105,8 +102,15 @@ namespace HomeBuild.Repositories
 		//Метод за вземане на информацията за количката на потребителя:
 		public async Task<ShoppingCartCRUD> UserShoppingCart(string userId)
 		{
-			// Вземане на всички елементи в количката на потребителя
+			//взимане на всички преемти от количката на потребителят
 			var items = await ShoppingCartItems(userId);
+
+			//групиране по име,цвят и размер
+			var productGroups = items.GroupBy(i => new { i.ProductName, i.Color, i.Size })
+				.ToDictionary(g => $"{g.Key.ProductName} ({g.Key.Color}) ({g.Key.Size})", g => g.Sum(i => i.Price * i.Quantity));
+
+			var totalPrice = items.Sum(i => i.Price * i.Quantity);
+
 			var cartItems = new ShoppingCartCRUD
 			{
 				ShoppingCarts = items.Select(x => new ShoppingCart
@@ -119,24 +123,23 @@ namespace HomeBuild.Repositories
 					Color = x.Color,
 					Size = x.Size,
 				}).ToList(),
-				PriceTotal = items.Sum(i => i.Price * i.Quantity),
-				ProductTotal = items.GroupBy(i => i.ProductName)
-			.ToDictionary(g => g.Key, g => g.Sum(i => i.Quantity * i.Price))
+				PriceTotal = totalPrice,
+				ProductTotal = productGroups
 			};
 			return cartItems;
 		}
 
+
 		//Метод за вземане на историята на поръчките на потребителя:
-		public async Task<List<ShoppingCartHistory>> OrderHistory(string userId)
+		public async Task<List<ShoppingCartHistory>> OrderHistory(string userId, bool payment)
 		{
 			// Взема всички продукти от кошницата на потребителя.
 			var cartItems = await _db.ShoppingCarts.Where(c => c.UserId == userId).ToListAsync();
 			var orderHistory = new List<ShoppingCartHistory>();
-
 			var cartCRUD = await UserShoppingCart(userId);
 			decimal totalPrice = cartCRUD.PriceTotal;
 
-			foreach (var item in cartItems)
+            foreach (var item in cartItems)
 			{
 				var orderItem = new ShoppingCartHistory
 				{
@@ -147,14 +150,14 @@ namespace HomeBuild.Repositories
 					Price = item.Price,
 					Quantity = item.Quantity,
 					UserId = userId,
-					Payed = true,
+					Payed = false,
+					Usernamne = item.User.FullName,
 					PurchaseDate = DateTime.UtcNow,
 					ProductTotal = item.Quantity * item.Price,
 					PriceTotal = totalPrice
 				};
 
 				orderHistory.Add(orderItem);
-				await _db.ShoppingCartHistories.AddAsync(orderItem);
 
 				// Намалява количеството на продукта в склада.
 				var stock = await _db.Stocks.FindAsync(item.ProductId);
@@ -174,10 +177,15 @@ namespace HomeBuild.Repositories
 				{
 					throw new Exception($"В момента нямаме налична");
 				}
-				_db.ShoppingCarts.Remove(item);
-			}
 
-			await _db.SaveChangesAsync();
+                if (payment == true)
+                {
+                    await _db.ShoppingCartHistories.AddRangeAsync(orderHistory);
+                    _db.ShoppingCarts.Remove(item);
+                }
+            }
+
+            await _db.SaveChangesAsync();
 
 			// Връща историята на поръчките на потребителите.
 			var orderItems = await _db.ShoppingCartHistories
@@ -186,18 +194,25 @@ namespace HomeBuild.Repositories
 
 			return orderItems;
 		}
+
+
 		public async Task<bool> Payment(string userId)
 		{
 			var cartItems = await _db.ShoppingCarts.Where(c => c.UserId == userId).ToListAsync();
-
 			decimal totalPrice = 0;
 			foreach (var item in cartItems)
 			{
 				totalPrice += item.Quantity * item.Price;
 			}
+
 			if (totalPrice > 0)
-			{ return true; }
-			else { return false; }
+			{ 
+				return true; 
+			}
+			else 
+			{ 
+				return false; 
+			}
 		}
 	}
 }

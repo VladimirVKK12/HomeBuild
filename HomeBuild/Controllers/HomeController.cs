@@ -24,7 +24,10 @@ namespace HomeBuild.Controllers
 
             return View(stocks);
         }
-
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
         public IActionResult Privacy()
 		{
 			return View();
