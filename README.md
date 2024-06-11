@@ -1,1 +1,1 @@
-# HomeBuild  It was used bootstrap template for this project 
+It was used bootstrap template for this project 
