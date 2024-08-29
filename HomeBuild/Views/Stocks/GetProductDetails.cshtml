@@ -1,0 +1,57 @@
+@model HomeBuild.Models.Stocks
+<br></br>
+<form method="post" asp-controller="ShoppingCart" asp-action="AddToCart">
+	<div class="row">
+		<input type="hidden" name="productId" value="@Model.Id"/>
+		<img class="card-img-top" src="@Url.Content(Model.UrlImg)" alt="@Model.Product" style="height: 420px; width: 400px; object-fit: cover; margin-left:120px;">
+		<div style="width:500px" class="card-body">
+			<h4 class="card-title" style="font-size: 24px; margin-bottom: 10px;">
+				<a href="#" style="text-decoration: none; color: #333;">@Model.Product</a>
+			</h4>
+			<p class="card-text" style="font-size: 16px; margin-bottom: 10px;">Тип: @Model.Type</p>
+			<div class="row">
+				<div class="col-md-4 card-text" style="font-size: 16px; margin-bottom: 5px;">Цвят:</div>
+				<div class="col-md-8">
+					<select name="color" style="font-size: 16px; margin-bottom: 10px; width: 100%;">
+						@foreach (var color in Model.Color.Split(','))
+						{
+							<option>@color</option>
+						}
+					</select>
+				</div>
+				<div class="col-md-4 card-text" style="font-size: 16px; margin-bottom: 5px;">Размер:</div>
+				<div class="col-md-8">
+					<select name="size" style="font-size: 16px; margin-bottom: 10px; width:25px; width: 100%;">
+						@foreach (var size in Model.Size.Split(','))
+						{
+							<option>@size</option>
+						}
+					</select>
+				</div>
+				<div class="col-md-4 card-text" style="font-size: 16px; margin-bottom: 5px;">Количество:</div>
+				<div class="col-md-8">
+					<div class="input-group">
+						<input type="number" name="quantity" value="1" min="1" max="@Model.Quantity" style="font-size: 16px; width: 80px; margin-bottom: 10px;" />
+					</div>
+				</div>
+			</div>
+			<h5 class="card-text" style="font-size: 24px; font-weight: bold; width:200px; margin-bottom: 10px;">Цена: $@Model.Price</h5>
+			<div class="card-footer" style="font-size: 20px; width:355px; color: #888;">
+				<small>Наличност: @Model.Quantity продукта</small>
+			</div>
+			@if (User.Identity.IsAuthenticated)
+			{
+				<div class="card-footer" style="padding-top: 20px; width:355px">
+					<button type="submit" class="btn btn-primary" style="font-size: 20px;">Добави в количка</button>
+				</div>
+			}
+			else
+			{
+				<div class="card-footer" style="padding-top: 20px; width:355px">
+					<p style="font-size: 20px; color:red">Влез в акаунта си от <a asp-controller="Accounts" asp-action="LogIn" style="font-size:20px; color:blue; border-bottom:2px solid blue;">тук</a> за да можеш да закупиш</p>
+				</div>
+			}
+		</div>
+	</div>
+</form>
+<br>

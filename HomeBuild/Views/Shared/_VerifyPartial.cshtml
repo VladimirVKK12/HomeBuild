@@ -1,0 +1,11 @@
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<HomeBuild.Models.ApplicationUser> UserManager
+@if (User.Identity.IsAuthenticated != true)
+{
+	<li><i class="ti-user"></i><a asp-controller="Accounts" asp-action="Register">Регистриране</a></li>
+	<li><i class="ti-user"></i><a asp-controller="Accounts" asp-action="LogIn">Влизане в акаунт</a></li>
+}
+else
+{
+	<li><i class="ti-user"></i>@User.Identity.Name</li>
+	<li><i class="ti-user"></i><a asp-controller="Accounts" asp-action="LogOff">Излизане от акаунт</a></li>
+}

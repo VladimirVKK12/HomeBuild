@@ -1,0 +1,48 @@
+﻿@model HomeBuild.ViewModel.StocksVM.StocksCRUD
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container">
+    <h1 class="text-center mb-4">Платежна информация</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="@Url.Action("Checkout", "ShoppingCart")" onsubmit="return showSuccessMessage()">
+                        <div class="form-group">
+                            <input type="text" maxlength="16" placeholder="Номер на картата" id="cardNumber" name="cardNumber" class="form-control" required pattern="\d*"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" maxlength="4" placeholder="Дата на Изтичане" id="expiryDate" name="expiryDate" class="form-control" required pattern="\d*"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" maxlength="25" placeholder="Име на притежателя на картата" id="cardHolderName" name="cardHolderName" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" maxlength="16" placeholder="Град" id="city" name="city" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" maxlength="20" placeholder="Адрес" id="city" name="adress" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <input placeholder="Зип Код" maxlength="7" type="text" id="zipCode" name="zipCode" class="form-control" required />
+                        </div>
+
+                        <div class="text-center">
+                            <a style="color: white; width:500px;" type="submit" asp-route-payment="True" class="btn btn-primary" asp-controller="ShoppingCart" asp-action="PurchasesHistory">Заплащане</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSuccessMessage() {
+        alert("You have successfully purchased from our store.");
+        $("form input").val("");
+        return false;
+    }
+</script>

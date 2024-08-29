@@ -1,0 +1,72 @@
+﻿@model IEnumerable<HomeBuild.Models.Stocks>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<section class="hero-slider">
+    <br></br>
+    <!-- Single Slider -->
+    <div id="mapid" class="single-slider">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5675004.457795296!2d15.488007584075653!3d46.01122682543076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14acd1cc3a847e3d%3A0xd2e94589d06dd729!2z0J_RgNC-0YTQtdGB0LjQvtC90LDQu9C90LAg0LPQuNC80L3QsNC30LjRjyDQv9C-INC10LvQtdC60YLRgNC-0YLQtdGF0L3QuNC60LAg0Lgg0LXQu9C10LrRgtGA0L7QvdC40LrQsA!5e0!3m2!1sbg!2sbg!4v1680858632681!5m2!1sbg!2sbg" width="1900" height="700" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <!--/ End Single Slider -->
+</section>
+<!--/ End Slider Area -->
+<!-- Start Product Area -->
+<div class="product-area section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title">
+                    <h2>Категории</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="product-info">
+                    <div id="searchedProductSection" class="nav-main">
+                        <!-- Tab Nav -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            @foreach (var type in Model.Select(item => item.Type).Distinct())
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tab-@type" role="tab">@type</a>
+                                </li>
+                            }
+                        </ul>
+                        <!--/ End Tab Nav -->
+                    </div>
+                    <div class="tab-content" id="myTabContent">
+                        @foreach (var type in Model.Select(item => item.Type).Distinct())
+                        {
+                            <div class="tab-pane fade" id="tab-@type" role="tabpanel">
+                                <div class="tab-single">
+                                    <div class="row">
+                                        @foreach (var item in Model.Where(x => x.Type == type))
+                                        {
+                                            <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+                                                <div class="single-product">
+                                                    <div class="product-img">
+                                                        <a href="@Url.Action("GetProductDetails", "Stocks", new { id = item.Id })">
+                                                            <img style="height:320px; width:250px;margin-right:12px" class="default-img" src="@Url.Content(item.UrlImg)" alt="#">
+                                                        </a>
+                                                    </div>
+                                                    <div style="border-top:2px solid; width:250px" class="product-content text-center">
+                                                        <div class="product-price">
+                                                            <span>@item.Product - @item.Price .Лв</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

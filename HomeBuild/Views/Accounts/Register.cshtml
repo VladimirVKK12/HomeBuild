@@ -1,0 +1,62 @@
+﻿@model HomeBuild.ViewModel.AccountsVM.RegisterVM
+@{
+	ViewData["Title"] = "Register";
+}
+<br></br>
+<div class="mask d-flex align-items-center h-100 gradient-custom-3">
+	<div class="container h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 col-md-9 col-lg-7 col-xl-6">
+				<div class="card" style="border-radius: 15px;">
+					<div class="card-body p-5">
+						<h2 class="text-uppercase text-center mb-5">Създаване на акаунт</h2>
+						<form asp-action="Register" method="post">
+
+							<div class="form-outline mb-4">
+								<input asp-for="Username" type="text" id="form3Example1cg" placeholder="Потребителско име" class="form-control form-control-lg" />
+								<span asp-validation-for="Username" style="color = red" class="fw-bold"></span>
+								@if (TempData["errUser"] != null && TempData["user"].ToString() == "user")
+								{
+									<span class="text-danger">@TempData["errUser"]</span>
+								}
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Email" type="email" id="form3Example3cg" placeholder="Имейл" class="form-control form-control-lg" />
+								<span asp-validation-for="Email" style="color = red" class="fw-bold"></span>
+								@if (TempData["errEmail"] != null && TempData["email"].ToString() == "email")
+								{
+									<span class="text-danger">@TempData["errEmail"]</span>
+								}
+							</div>
+
+							<div class="form-outline mb-4">
+								<input asp-for="Password" type="password" id="form3Example4cg" placeholder="Парола" class="form-control form-control-lg" />
+								<span asp-validation-for="Password" style="color = red" class="fw-bold"></span>
+								@if (TempData["errPass"] != null && TempData["pass"].ToString() == "pass")
+								{
+									<span class="text-danger">@TempData["errPass"]</span>
+								}
+							</div>
+
+							<div class="d-flex justify-content-center">
+								<button type="submit"
+										class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+									Регистриране
+								</button>
+							</div>
+
+							<p class="text-center text-muted mt-5 mb-0">
+								Вече имате акаунт? <a href="~/Accounts/LogIn"
+		                        class="fw-bold text-body" style="color:blue"><u>Влезте от тук</u></a>
+							</p>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

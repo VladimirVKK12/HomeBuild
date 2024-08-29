@@ -1,0 +1,35 @@
+﻿@model List<ShoppingCartHistory>
+@{
+	ViewData["Title"] = "PurchasesHistory";
+}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Продукт</th>
+			<th>Цвят</th>
+			<th>Размер</th>
+			<th>Цена</th>
+			<th class="text-center">Количество</th>
+			<th class="text-center">Сума на проудкт</th>
+			<th class="text-center">Обща сума</th>
+			<th class="text-center">Дата</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.ProductName</td>
+				<td>@item.Color</td>
+				<td>@item.Size</td>
+				<td>@item.Price</td>
+				<td class="text-center">@item.Quantity</td>
+				<td class="text-center">@item.ProductTotal</td>
+				<td class="text-center">@item.PriceTotal</td>
+			    <td class="text-center">@item.PurchaseDate</td>
+			</tr>
+		}
+	</tbody>
+</table>
+

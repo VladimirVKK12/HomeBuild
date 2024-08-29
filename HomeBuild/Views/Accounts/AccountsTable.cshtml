@@ -1,0 +1,31 @@
+﻿@model List<HomeBuild.ViewModel.AccountsVM.AllAccountsVM>
+@{
+    ViewData["Title"] = "AccountsTable";
+}
+
+<table>
+    <thead>
+        <tr class="text-center">
+            <th>Име на потребителят</th>
+            <th>Имейл</th>
+            <th>Име и Имейл</th>
+            <th>Роля</th>
+            <th>Премахване</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr class="text-center">
+                <td style="border-bottom: 2px solid black">@user.UserName</td>
+                <td style="border-bottom: 2px solid black">@user.Email</td>
+                <td style="border-bottom: 2px solid black">@user.FullName</td>
+                <td style="border-bottom: 2px solid black">@string.Join(", ", user.Roles)</td>
+                <td style="border-bottom: 2px solid black">
+                    <a href="@Url.Action("Delete", new { id = user.Id })" onclick="return confirm('Искаш ли да го изтриеш')" style="color: blue; text-decoration: underline;">Премахни</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

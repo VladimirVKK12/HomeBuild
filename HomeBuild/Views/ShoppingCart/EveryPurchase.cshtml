@@ -1,0 +1,53 @@
+﻿@model List<ShoppingCartHistory>
+@{
+    ViewData["Title"] = "EveryPurchase";
+}
+
+<form asp-controller="ShoppingCart" asp-action="EveryPurchase" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Потребител</th>
+                <th>Продукт</th>
+                <th>Цвят</th>
+                <th>Размер</th>
+                <th>Цена</th>
+                <th class="text-center">Количество</th>
+                <th class="text-center">Сума на продукт</th>
+                <th class="text-center">Обща сума</th>
+                <th class="text-center">Дата</th>
+                <th class="text-center">Заплатил</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Usernamne</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Color</td>
+                    <td>@item.Size</td>
+                    <td>@item.Price</td>
+                    <td class="text-center">@item.Quantity</td>
+                    <td class="text-center">@item.ProductTotal</td>
+                    <td class="text-center">@item.PriceTotal</td>
+                    <td class="text-center">@item.PurchaseDate</td>
+                    @if (item.Payed == true)
+                    {
+                        <td class="text-center"><p>Заплатено</p></td>
+                    }
+                    else
+                    {
+                        <td class="text-center"><p>Изчаква се</p></td>
+                    }
+                    <td class="text-center">
+                        <input type="checkbox" name="paidIds" value="@item.Id" @(item.Payed ? "checked" : "") />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-right">
+        <button type="submit" class="btn btn-primary">Запази промените</button>
+    </div>
+</form>

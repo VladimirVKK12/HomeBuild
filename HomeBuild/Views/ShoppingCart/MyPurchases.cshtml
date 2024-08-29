@@ -1,0 +1,59 @@
+﻿@model HomeBuild.ViewModel.ShoppingCartVM.ShoppingCartCRUD
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+@{
+	ViewData["Title"] = "MyPurchases";
+}
+<table class="table">
+	<thead>
+		<tr class="text-center">
+			<th>Изображение</th>
+			<th>Продукт</th>
+			<th>Цвят и Размер</th>
+			<th>Цена</th>
+			<th>Количество</th>
+			<th>Обща цена</th>
+			<th>Премахване</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.ShoppingCarts)
+		{
+			<tr class="text-center">
+				<td><img src="@Url.Content(item.UrlImg)" alt="Product Image" /></td>
+				<td>@item.ProductName</td>
+				<td>@item.Color,@item.Size</td>
+				<td>@item.Price</td>
+				<td>
+					<form asp-action="UpdateQuantity" method="post" asp-controller="ShoppingCart">
+						<input type="hidden" name="id" value="@item.Id" />
+						<input type="hidden" name="userid" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+						<input type="number" style="width:63px" id="quantity" min="1" name="quantity" value="@item.Quantity" oninput="submitForm(this.form)" />
+					</form>
+				</td>
+				<td>@(Model.ProductTotal.ContainsKey($"{item.ProductName} ({item.Color}) ({item.Size})") ? Model.ProductTotal[$"{item.ProductName} ({item.Color}) ({item.Size})"].ToString() : "0")</td>
+				<td>
+					<form asp-action="RemoveFromCart" method="post" asp-controller="ShoppingCart">
+						<input type="hidden" name="id" value="@item.Id" />
+						<button type="submit" class="btn btn-danger">Премахни</button>
+					</form>
+				</td>
+			</tr>
+		}
+		<tr>
+			<td colspan="3" class="text-right"><strong>Общо:</strong></td>
+			<td>@Model.PriceTotal</td>
+			<td>
+				@if (Model.PriceTotal == 0)
+				{
+					<a asp-controller="ShoppingCart" asp-action="MyPurchases" class="btn text-white" onclick="return confirm('Количката е празна')">Заплати</a>
+				}
+				else
+				{
+					<a asp-controller="ShoppingCart" asp-action="Checkout" asp-route-payment="true" class="btn text-white">Заплати</a>
+				}
+
+			</td>
+		</tr>
+	</tbody>
+</table>
