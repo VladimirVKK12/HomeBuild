@@ -13,6 +13,19 @@ Welcome to **HomeBuild**, a powerful web-based platform designed for the sale of
 - **Shopping Cart**: Add products to your cart, adjust quantities, and manage items with ease.
 - **Purchase & Checkout**: Complete your purchase smoothly and view your transaction history at any time.
 
+###🔐 Pre-configured Accounts
+The project includes a committed database with the following pre-configured accounts:
+
+- **Admin Account**
+Username: Admin
+Email: admin@gmail.com
+Password: 1!Admin
+
+- **Regular User Account**
+Username: Vlado
+Email: vlado@gmail.com
+Password: 1!Vlado
+
 ### 🎨 **Responsive Design**
 - A user-friendly interface powered by **Bootstrap**, ensuring an optimal experience across all devices, from desktops to mobile phones.
 
