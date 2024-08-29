@@ -29,9 +29,11 @@ Welcome to **HomeBuild**, a powerful web-based platform designed for the sale of
 
 ## 📂 Project Structure
 
-- **Controllers**: Handle business logic for product listings, shopping carts, and user management.
-- **Models**: Define data structures for users, products, shopping carts, and orders.
-- **Repositories**: Implement data access logic with the repository pattern.
-- **ViewModels**: Facilitate data exchange between controllers and views.
-- **Views**: Razor views render the application’s user interface.
-- **wwwroot**: Contains static assets like CSS, JavaScript, and third-party libraries.
+```bash
+📁 HomeBuild/
+├── 📁 Controllers/          # Handles business logic
+├── 📁 Models/               # Defines data structures
+├── 📁 Repositories/         # Implements data access logic
+├── 📁 ViewModels/           # Facilitates data exchange between controllers and views
+├── 📁 Views/                # Razor views rendering the UI
+└── 📁 wwwroot/              # Static assets (CSS, JS, third-party libraries)
