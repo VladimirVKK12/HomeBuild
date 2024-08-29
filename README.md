@@ -17,13 +17,13 @@ Welcome to **HomeBuild**, a powerful web-based platform designed for the sale of
 #### The project includes a committed database with the following pre-configured accounts:
 
 - **Admin Account**
-Username: Admin
-Email: admin@gmail.com
+Username: Admin, 
+Email: admin@gmail.com, 
 Password: 1!Admin
 
 - **Regular User Account**
-Username: Vlado
-Email: vlado@gmail.com
+Username: Vlado, 
+Email: vlado@gmail.com, 
 Password: 1!Vlado
 
 ### 🎨 **Responsive Design**
