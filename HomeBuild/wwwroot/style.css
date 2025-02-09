@@ -1,3 +1,4 @@
+
 .btn {
 	position: relative;
 	font-weight: 500;
@@ -470,7 +471,62 @@
 	position: relative;
 	background: #f7941d;
 }
+.header.shop .all-category h3{
+	padding: 20px 25px;
+}
+.header.shop .cat-heading {
+	font-size: 20px;
+	color: #fff;
+}
+.header.shop .cat-heading i {
+	color: #fff;
+	display: inline-block;
+	margin-right: 15px;
+	font-size: 22px;
+}
 
+.header.shop .main-category li .mega-menu .single-menu .inner-link a:hover{
+	color:#F7941D;
+	background:transparent;
+}
+.header.shop .main-category li .mega-menu .single-menu .inner-link a:last-child{
+	margin-bottom:0px;
+}
+.header.shop .menu-origin {
+	float:none;
+	display: inline-block;
+	float: right;
+}
+.header.shop .nav li {
+	margin-right: 40px;
+	float: left;
+	position: relative;
+}
+.header.shop .nav li {
+	margin-right:5px;
+	position: relative;
+	float: none;
+}
+.header.shop .nav li:last-child{
+	margin-right:0;
+}
+.header.shop .nav li .new {
+	background: #F7941D;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 9px;
+	position: absolute;
+	left: 21px;
+	top: 2px;
+	font-weight: 500;
+	height: 18px;
+	line-height: 18px;
+	text-align: center;
+	display: block;
+}
+.header.shop.v2 .nav li a{
+	color:#333;
+}
 .header.shop .nav li a {
 	color: #fff;
 	text-transform: capitalize;
