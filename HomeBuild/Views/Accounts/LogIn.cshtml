@@ -1,51 +1,39 @@
 ﻿@model HomeBuild.ViewModel.AccountsVM.LogInVM
 @{
-	ViewData["Title"] = "LogIn";
+    ViewData["Title"] = "LogIn";
 }
 <br></br>
-<div class="mask d-flex align-items-center h-100 gradient-custom-3">
-	<div class="container h-100">
-		<div class="row d-flex justify-content-center align-items-center h-100">
-			<div class="col-12 col-md-9 col-lg-7 col-xl-6">
-				<div class="card" style="border-radius: 15px;">
-					<div class="card-body p-5">
-						<h2 class="text-uppercase text-center mb-5">Влизане в акаунт</h2>
+<div class="login-wrapper">
+    <div class="login-container">
+        <div class="login-card">
+            <h2 class="text-center">Влизане в акаунт</h2>
+            <form asp-action="LogIn" method="post" class="login-form">
+                <div class="form-group">
+                    <input asp-for="Email" placeholder="Имейл" type="text" id="form3Example1cg" class="form-control" />
+                    <span asp-validation-for="Email" class="error-message"></span>
+                    @if (TempData["errEmail"] != null && TempData["email"].ToString() == "email")
+                    {
+                        <span class="text-danger">@TempData["errEmail"]</span>
+                    }
+                </div>
 
-						<form asp-action="LogIn" method="post">
+                <div class="form-group">
+                    <input asp-for="Password" placeholder="Парола" type="password" id="form3Example4cg" class="form-control" />
+                    <span asp-validation-for="Password" class="error-message"></span>
+                    @if (TempData["errPass"] != null && TempData["pass"].ToString() == "pass")
+                    {
+                        <span class="text-danger">@TempData["errPass"]</span>
+                    }
+                </div>
 
-							<div class="form-outline mb-4">
-								<input asp-for="Email" placeholder="Имейл" type="text" id="form3Example1cg" class="form-control form-control-lg" />
-								<span asp-validation-for="Email" style="color=red" class="fw-bold"></span>
-								@if (TempData["errEmail"] != null && TempData["email"].ToString() == "email")
-								{
-									<span class="text-danger">@TempData["errEmail"]</span>
-								}
-							</div>
+                <div class="submit-btn-container">
+                    <button type="submit" class="submit-btn">Влизане</button>
+                </div>
 
-							<div class="form-outline mb-4">
-								<input asp-for="Password" placeholder="Парола" type="password" id="form3Example4cg" class="form-control form-control-lg" />
-								<span asp-validation-for="Password" style="color=red" class="fw-bold"></span>
-								@if (TempData["errPass"] != null && TempData["pass"].ToString() == "pass")
-								{
-									<span class="text-danger">@TempData["errPass"]</span>
-								}
-							</div>
-
-							<div class="d-flex justify-content-center">
-								<button type="submit"
-										class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
-									Влизане
-								</button>
-							</div>
-							<p class="text-center text-muted mt-5 mb-0">
-								Dont have an account? <a href="~/Accounts/Register"
-			   class="fw-bold text-body" style="color:blue"><u>Регистрираи се тук</u></a>
-							</p>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                <p class="text-center">
+                    Don't have an account? <a href="~/Accounts/Register" class="register-link">Регистрирай се тук</a>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
-
